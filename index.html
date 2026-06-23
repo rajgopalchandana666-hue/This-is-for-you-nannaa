@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Birthday Surprise</title>
+    <style>
+        :root {
+            --bg-color: #0b0914;
+            --card-bg: #141124;
+            --accent: #ff4d79;
+            --text-main: #ffffff;
+            --text-muted: #a09cb0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+
+        .phone-wrapper {
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hidden { display: none !important; }
+
+        h2.title {
+            font-size: 1.8rem;
+            color: var(--text-main);
+            margin-bottom: 8px;
+        }
+
+        p.desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* --- SCREEN 1: KEYPAD LOCK --- */
+        .pin-dots {
+            font-size: 2.2rem;
+            letter-spacing: 12px;
+            margin: 25px 0;
+            color: var(--accent);
+            height: 40px;
+        }
+
+        .grid-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            max-width: 280px;
+            margin: 0 auto;
+        }
+
+        .btn-key {
+            background: rgba(255, 255, 255, 0.04);
+            border: none;
+            color: var(--text-main);
+            font-size: 1.3rem;
+            font-weight: 600;
+            padding: 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            aspect-ratio: 1;
+            transition: background 0.2s;
+        }
+
+        .btn-key:active { background: var(--accent); }
+
+        /* --- SCREEN 2: MAIN DASHBOARD --- */
+        .celebrate-tag {
+            background: rgba(255, 77, 121, 0.1);
+            color: var(--accent);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+        }
+
+        .big-name {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 5px 0;
+            letter-spacing: -0.5px;
+        }
+
+        /* Animated Cat Gifs Section */
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .cats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 15px 0 25px 0;
+        }
+
+        .cat-box {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 6px;
+            border-radius: 12px;
+            font-size: 1.8rem;
+            animation: bounceCats 0.6s infinite alternate ease-in-out;
+        }
+        .cat-box:nth-child(2n) { animation-delay: 0.15s; }
+        .cat-box:nth-child(3n) { animation-delay: 0.3s; }
+
+        @keyframes bounceCats {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+        }
+
+        /* Polaroid Frames */
+        .photo-reveal-container {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 16px;
+            margin: 20px 0;
+        }
+
+        .polaroid-stack {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .polaroid-card {
+            background: #ffffff;
+            color: #111111;
+            padding: 8px 8px 16px 8px;
+            border-radius: 4px;
+            width: 48%;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            transform: rotate(-2deg);
+        }
+        .polaroid-card:nth-child(2) { transform: rotate(3deg); }
+
+        .polaroid-card img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+
+        .polaroid-card p {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        /* Drag/Click Cake Cutting */
+        .interactive-cake-box {
+            background: rgba(255,255,255,0.02);
+            border: 2px dashed rgba(255, 77, 121, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .cake-graphic {
+            font-size: 4.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s;
+            margin: 15px 0;
+        }
+        .cake-graphic:active { transform: scale(0.95); }
+
+        /* Love Letter Style */
+        .letter-content {
+            background: #fffef0;
+            color: #1e2229;
+            padding: 22px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+            margin-top: 15px;
+        }
+
+        .nav-button {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(255, 77, 121, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-wrapper">
+        
+        <!-- MODULE 1: SECRET CODE GATE -->
+        <div id="panel-gate" class="card">
+            <h2 class="title">🔒 A surprise is waiting</h2>
+            <p class="desc">ENTER THE SECRET CODE<br>Guess the date we never forget Our Bdays(25**)  🤫</p>
+            
+            <div class="pin-dots" id="input-dots">••••</div>
+            
+            <div class="grid-keypad">
+                <button class="btn-key" onclick="tapKey(1)">1</button>
+                <button class="btn-key" onclick="tapKey(2)">2</button>
+                <button class="btn-key" onclick="tapKey(3)">3</button>
+                <button class="btn-key" onclick="tapKey(4)">4</button>
+                <button class="btn-key" onclick="tapKey(5)">5</button>
+                <button class="btn-key" onclick="tapKey(6)">6</button>
+                <button class="btn-key" onclick="tapKey(7)">7</button>
+                <button class="btn-key" onclick="tapKey(8)">8</button>
+                <button class="btn-key" onclick="tapKey(9)">9</button>
+                <button class="btn-key" onclick="resetKeys()">❌</button>
+                <button class="btn-key" onclick="tapKey(0)">0</button>
+                <button class="btn-key" onclick="verifyCode()">✨</button>
+            </div>
+        </div>
+
+        <!-- MODULE 2: SURPRISE CONTENT HUB -->
+        <div id="panel-dashboard" class="card hidden">
+            <div class="celebrate-tag">🎈 A BIRTHDAY MADE JUST FOR YOU</div>
+            <p class="desc">Happy Birthday,</p>
+            <h1 class="big-name">Akki 👑</h1>
+            <p class="desc" style="color: #6c697e;">Today is all about celebrating someone truly special ✨</p>
+            
+            <!-- Cats are celebrating too row -->
+            <div class="section-label">🐾 Our Favourite Cats • They're celebrating too!</div>
+            <div class="cats-grid">
+                <div class="cat-box">🐱</div>
+                <div class="cat-box">😺</div>
+                <div class="cat-box">😸</div>
+                <div class="cat-box">😻</div>
+            </div>
+
+            <!-- Polaroid Photo Frames Grid -->
+            <div class="section-label">📸 I saved these for you</div>
+            <div class="photo-reveal-container">
+                <div class="polaroid-stack">
+                    <div class="polaroid-card">
+                        <!-- Remember to upload akki1.jpg and akki2.jpg to your root repo -->
+                        <img src="file_00000000ce9c72088eb20b8a5bbfa9aa.png" alt="file_0000000033007208ba09fa8a06abdf91.png">
+                        <p>brighter ✨</p>
+                    </div>
+                    <div class="polaroid-card">
+                        <img src="file_00000000ce9c72088eb20b8a5bbfa9aa.png" alt="file_0000000033007208ba09fa8a06abdf91.png">
+                        <p>always ❤️</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Your Custom Spotify Song Placed Here -->
+            <div class="section-label">🎵 Playing just for you</div>
+            <div style="margin: 12px 0;">
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            </div>
+
+            <!-- Interactive Slicing Cake Segment -->
+            <div class="section-label">🎂 Interactive • Cut the cake!</div>
+            <div class="interactive-cake-box">
+                <p class="desc" id="cake-instruction">Click/Tap across the cake to cut a slice</p>
+                <div class="cake-graphic" id="target-cake" onclick="sliceAction()">🎂</div>
+                <p id="cake-success-msg" style="color: var(--accent); font-weight: bold; margin-top: 5px;"></p>
+            </div>
+
+            <!-- Heart Handwritten Letter Deck -->
+            <div class="section-label">💌 From My Heart • A letter I wrote for you</div>
+            <div class="letter-content">
+                <p><strong>My dearest Yashuu papaw,</strong></p><br>
+                <p>I don't say this enough, but I'm really lucky to have you in my life. You make everything feel lighter, even on the worst days.</p><br>
+                <p>On your birthday, I just want you to know how much you mean to me. I hope this year brings you everything you've been wishing for ❤️</p><br>
+                <p style="text-align: right; font-weight: bold; color: var(--accent);">Forever yours, Gopaal... 🌹</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const PASS_CODE = "2517"; 
+        let typedPass = "";
+
+        function tapKey(val) {
+            if (typedPass.length < 4) {
+                typedPass += val;
+                document.getElementById("input-dots").innerText = "*".repeat(typedPass.length);
+            }
+        }
+
+        function resetKeys() {
+            typedPass = "";
+            document.getElementById("input-dots").innerText = "••••";
+        }
+
+        function verifyCode() {
+            if (typedPass === PASS_CODE) {
+                document.getElementById("panel-gate").classList.add("hidden");
+                document.getElementById("panel-dashboard").classList.remove("hidden");
+            } else {
+                alert("Wrong Code! Try entering your special year code again 🤫");
+                resetKeys();
+            }
+        }
+
+        function sliceAction() {
+            const cakeObj = document.getElementById("target-cake");
+            cakeObj.innerText = "🍰✨🍰";
+            document.getElementById("cake-instruction").innerText = "🎉 Perfect Slice!";
+            document.getElementById("cake-success-msg").innerText = "A slice for you, a slice for me, and one for the cats! 🐾";
+        }
+    </script>
+</body>
+</html>
